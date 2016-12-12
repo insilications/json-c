@@ -4,7 +4,7 @@
 #
 Name     : json-c
 Version  : 0.12
-Release  : 4
+Release  : 5
 URL      : https://s3.amazonaws.com/json-c_releases/releases/json-c-0.12.tar.gz
 Source0  : https://s3.amazonaws.com/json-c_releases/releases/json-c-0.12.tar.gz
 Summary  : JSON implementation in C
@@ -39,10 +39,12 @@ lib components for the json-c package.
 %setup -q -n json-c-0.12
 
 %build
+export LANG=C
 %configure --disable-static
 make V=1  %{?_smp_mflags}
 
 %check
+export LANG=C
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost
@@ -72,9 +74,10 @@ rm -rf %{buildroot}
 /usr/include/json-c/linkhash.h
 /usr/include/json-c/printbuf.h
 /usr/include/json-c/random_seed.h
-/usr/lib64/*.so
-/usr/lib64/pkgconfig/*.pc
+/usr/lib64/libjson-c.so
+/usr/lib64/pkgconfig/json-c.pc
 
 %files lib
 %defattr(-,root,root,-)
-/usr/lib64/*.so.*
+/usr/lib64/libjson-c.so.2
+/usr/lib64/libjson-c.so.2.0.1
