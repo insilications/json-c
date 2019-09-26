@@ -4,13 +4,14 @@
 #
 Name     : json-c
 Version  : 0.13.1
-Release  : 13
+Release  : 14
 URL      : https://s3.amazonaws.com/json-c_releases/releases/json-c-0.13.1.tar.gz
 Source0  : https://s3.amazonaws.com/json-c_releases/releases/json-c-0.13.1.tar.gz
 Summary  : A JSON implementation in C
 Group    : Development/Tools
 License  : MIT
-Requires: json-c-lib
+Requires: json-c-lib = %{version}-%{release}
+Requires: json-c-license = %{version}-%{release}
 BuildRequires : gcc-dev32
 BuildRequires : gcc-libgcc32
 BuildRequires : gcc-libstdc++32
@@ -23,8 +24,9 @@ BuildRequires : glibc-libc32
 %package dev
 Summary: dev components for the json-c package.
 Group: Development
-Requires: json-c-lib
-Provides: json-c-devel
+Requires: json-c-lib = %{version}-%{release}
+Provides: json-c-devel = %{version}-%{release}
+Requires: json-c = %{version}-%{release}
 
 %description dev
 dev components for the json-c package.
@@ -33,8 +35,8 @@ dev components for the json-c package.
 %package dev32
 Summary: dev32 components for the json-c package.
 Group: Default
-Requires: json-c-lib32
-Requires: json-c-dev
+Requires: json-c-lib32 = %{version}-%{release}
+Requires: json-c-dev = %{version}-%{release}
 
 %description dev32
 dev32 components for the json-c package.
@@ -43,6 +45,7 @@ dev32 components for the json-c package.
 %package lib
 Summary: lib components for the json-c package.
 Group: Libraries
+Requires: json-c-license = %{version}-%{release}
 
 %description lib
 lib components for the json-c package.
@@ -51,9 +54,18 @@ lib components for the json-c package.
 %package lib32
 Summary: lib32 components for the json-c package.
 Group: Default
+Requires: json-c-license = %{version}-%{release}
 
 %description lib32
 lib32 components for the json-c package.
+
+
+%package license
+Summary: license components for the json-c package.
+Group: Default
+
+%description license
+license components for the json-c package.
 
 
 %prep
@@ -66,29 +78,42 @@ popd
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
-export LANG=C
-export SOURCE_DATE_EPOCH=1522542694
+export LANG=C.UTF-8
+export SOURCE_DATE_EPOCH=1569521927
+export GCC_IGNORE_WERROR=1
+export AR=gcc-ar
+export RANLIB=gcc-ranlib
+export NM=gcc-nm
+export CFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=4 "
+export FCFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=4 "
+export FFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=4 "
+export CXXFLAGS="$CXXFLAGS -O3 -ffat-lto-objects -flto=4 "
 %configure --disable-static
 make  %{?_smp_mflags}
 
 pushd ../build32/
 export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
-export CFLAGS="$CFLAGS -m32"
-export CXXFLAGS="$CXXFLAGS -m32"
-export LDFLAGS="$LDFLAGS -m32"
+export ASFLAGS="${ASFLAGS}${ASFLAGS:+ }--32"
+export CFLAGS="${CFLAGS}${CFLAGS:+ }-m32 -mstackrealign"
+export CXXFLAGS="${CXXFLAGS}${CXXFLAGS:+ }-m32 -mstackrealign"
+export LDFLAGS="${LDFLAGS}${LDFLAGS:+ }-m32 -mstackrealign"
 %configure --disable-static    --libdir=/usr/lib32 --build=i686-generic-linux-gnu --host=i686-generic-linux-gnu --target=i686-clr-linux-gnu
 make  %{?_smp_mflags}
 popd
 %check
-export LANG=C
+export LANG=C.UTF-8
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 make VERBOSE=1 V=1 %{?_smp_mflags} check
+cd ../build32;
+make VERBOSE=1 V=1 %{?_smp_mflags} check || :
 
 %install
-export SOURCE_DATE_EPOCH=1522542694
+export SOURCE_DATE_EPOCH=1569521927
 rm -rf %{buildroot}
+mkdir -p %{buildroot}/usr/share/package-licenses/json-c
+cp COPYING %{buildroot}/usr/share/package-licenses/json-c/COPYING
 pushd ../build32/
 %make_install32
 if [ -d  %{buildroot}/usr/lib32/pkgconfig ]
@@ -138,3 +163,7 @@ popd
 %defattr(-,root,root,-)
 /usr/lib32/libjson-c.so.4
 /usr/lib32/libjson-c.so.4.0.0
+
+%files license
+%defattr(0644,root,root,0755)
+/usr/share/package-licenses/json-c/COPYING
