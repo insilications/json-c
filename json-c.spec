@@ -4,7 +4,7 @@
 #
 Name     : json-c
 Version  : 0.13.1
-Release  : 14
+Release  : 15
 URL      : https://s3.amazonaws.com/json-c_releases/releases/json-c-0.13.1.tar.gz
 Source0  : https://s3.amazonaws.com/json-c_releases/releases/json-c-0.13.1.tar.gz
 Summary  : A JSON implementation in C
@@ -17,6 +17,7 @@ BuildRequires : gcc-libgcc32
 BuildRequires : gcc-libstdc++32
 BuildRequires : glibc-dev32
 BuildRequires : glibc-libc32
+Patch1: CVE-2020-12762.patch
 
 %description
 
@@ -70,6 +71,8 @@ license components for the json-c package.
 
 %prep
 %setup -q -n json-c-0.13.1
+cd %{_builddir}/json-c-0.13.1
+%patch1 -p1
 pushd ..
 cp -a json-c-0.13.1 build32
 popd
@@ -79,15 +82,15 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1569521927
+export SOURCE_DATE_EPOCH=1594781295
 export GCC_IGNORE_WERROR=1
 export AR=gcc-ar
 export RANLIB=gcc-ranlib
 export NM=gcc-nm
-export CFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=4 "
-export FCFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=4 "
-export FFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=4 "
-export CXXFLAGS="$CXXFLAGS -O3 -ffat-lto-objects -flto=4 "
+export CFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=4 -fstack-protector-strong -mzero-caller-saved-regs=used "
+export FCFLAGS="$FFLAGS -O3 -ffat-lto-objects -flto=4 -fstack-protector-strong -mzero-caller-saved-regs=used "
+export FFLAGS="$FFLAGS -O3 -ffat-lto-objects -flto=4 -fstack-protector-strong -mzero-caller-saved-regs=used "
+export CXXFLAGS="$CXXFLAGS -O3 -ffat-lto-objects -flto=4 -fstack-protector-strong -mzero-caller-saved-regs=used "
 %configure --disable-static
 make  %{?_smp_mflags}
 
@@ -110,10 +113,10 @@ cd ../build32;
 make VERBOSE=1 V=1 %{?_smp_mflags} check || :
 
 %install
-export SOURCE_DATE_EPOCH=1569521927
+export SOURCE_DATE_EPOCH=1594781295
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/json-c
-cp COPYING %{buildroot}/usr/share/package-licenses/json-c/COPYING
+cp %{_builddir}/json-c-0.13.1/COPYING %{buildroot}/usr/share/package-licenses/json-c/0cd23537e3c32497c7b87157b36f9d2eb5fca64b
 pushd ../build32/
 %make_install32
 if [ -d  %{buildroot}/usr/lib32/pkgconfig ]
@@ -166,4 +169,4 @@ popd
 
 %files license
 %defattr(0644,root,root,0755)
-/usr/share/package-licenses/json-c/COPYING
+/usr/share/package-licenses/json-c/0cd23537e3c32497c7b87157b36f9d2eb5fca64b
