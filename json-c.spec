@@ -4,10 +4,10 @@
 #
 %define keepstatic 1
 Name     : json-c
-Version  : 20200726
-Release  : 16
-URL      : file:///insilications/build/clearlinux/packages/json-c/json-c-20200726.tar.gz
-Source0  : file:///insilications/build/clearlinux/packages/json-c/json-c-20200726.tar.gz
+Version  : 0.14.20200419
+Release  : 17
+URL      : https://github.com/json-c/json-c/archive/json-c-0.14-20200419.tar.gz
+Source0  : https://github.com/json-c/json-c/archive/json-c-0.14-20200419.tar.gz
 Summary  : A JSON implementation in C
 Group    : Development/Tools
 License  : GPL-2.0
@@ -22,9 +22,6 @@ BuildRequires : glibc-dev
 BuildRequires : glibc-dev32
 BuildRequires : glibc-libc32
 BuildRequires : glibc-staticdev
-BuildRequires : pkg-config
-BuildRequires : pkgconfig(32json-c)
-BuildRequires : pkgconfig(json-c)
 # Suppress stripping binaries
 %define __strip /bin/true
 %define debug_package %{nil}
@@ -69,27 +66,9 @@ Group: Default
 lib32 components for the json-c package.
 
 
-%package staticdev
-Summary: staticdev components for the json-c package.
-Group: Default
-Requires: json-c-dev = %{version}-%{release}
-
-%description staticdev
-staticdev components for the json-c package.
-
-
-%package staticdev32
-Summary: staticdev32 components for the json-c package.
-Group: Default
-Requires: json-c-dev = %{version}-%{release}
-
-%description staticdev32
-staticdev32 components for the json-c package.
-
-
 %prep
-%setup -q -n json-c
-cd %{_builddir}/json-c
+%setup -q -n json-c-json-c-0.14-20200419
+cd %{_builddir}/json-c-json-c-0.14-20200419
 
 %build
 unset http_proxy
@@ -97,7 +76,7 @@ unset https_proxy
 unset no_proxy
 export SSL_CERT_FILE=/var/cache/ca-certs/anchors/ca-certificates.crt
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1602735849
+export SOURCE_DATE_EPOCH=1602737265
 mkdir -p clr-build
 pushd clr-build
 export GCC_IGNORE_WERROR=1
@@ -176,7 +155,7 @@ unset PKG_CONFIG_PATH
 popd
 
 %install
-export SOURCE_DATE_EPOCH=1602735849
+export SOURCE_DATE_EPOCH=1602737265
 rm -rf %{buildroot}
 pushd clr-build32
 %make_install32
@@ -197,6 +176,7 @@ popd
 %files dev
 %defattr(-,root,root,-)
 /usr/include/json-c/arraylist.h
+/usr/include/json-c/config.h
 /usr/include/json-c/debug.h
 /usr/include/json-c/json.h
 /usr/include/json-c/json_c_version.h
@@ -229,17 +209,9 @@ popd
 %files lib
 %defattr(-,root,root,-)
 /usr/lib64/libjson-c.so.5
-/usr/lib64/libjson-c.so.5.1.0
+/usr/lib64/libjson-c.so.5.0.0
 
 %files lib32
 %defattr(-,root,root,-)
 /usr/lib32/libjson-c.so.5
-/usr/lib32/libjson-c.so.5.1.0
-
-%files staticdev
-%defattr(-,root,root,-)
-/usr/lib64/libjson-c.a
-
-%files staticdev32
-%defattr(-,root,root,-)
-/usr/lib32/libjson-c.a
+/usr/lib32/libjson-c.so.5.0.0
