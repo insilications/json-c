@@ -1,0 +1,2 @@
+export USE_VALGRIND=0
+make -j16 test USE_VALGRIND=0 V=1 VERBOSE=1 || :
