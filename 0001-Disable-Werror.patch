@@ -1,0 +1,38 @@
+From 3bf6e8d2a3ce6119b9c926455795014e2d3f58b3 Mon Sep 17 00:00:00 2001
+From: insilications <boboniboni@gmail.com>
+Date: Thu, 15 Oct 2020 02:08:06 -0300
+Subject: [PATCH] Disable Werror
+
+---
+ CMakeLists.txt | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 5e828ab..208a8a8 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -27,8 +27,8 @@ if(MSVC)
+   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /wd4100 /wd4996 /wd4244 /wd4706 /wd4702 /wd4127 /wd4701")
+   set(cmake_create_config 1)
+ elseif(MINGW)
+-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror -D_GNU_SOURCE=1")
+-  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Werror -D_GNU_SOURCE=1")
++  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_GNU_SOURCE=1")
++  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -D_GNU_SOURCE=1")
+   if (MSYS OR CMAKE_GENERATOR STREQUAL "Unix Makefiles")
+     execute_process(COMMAND echo ${CMAKE_CURRENT_SOURCE_DIR} WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+     execute_process(COMMAND sh autogen.sh WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+@@ -39,8 +39,8 @@ elseif(MINGW)
+     set(cmake_create_config 1)
+   endif()
+ elseif(UNIX)
+-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror")
+-  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Werror -D_GNU_SOURCE")
++  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
++  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -D_GNU_SOURCE")
+   execute_process(COMMAND echo ${CMAKE_CURRENT_SOURCE_DIR} WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+   execute_process(COMMAND sh autogen.sh WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+   execute_process(COMMAND ./configure WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+-- 
+2.28.0
+

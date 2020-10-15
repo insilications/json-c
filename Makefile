@@ -1,5 +1,5 @@
 PKG_NAME := json-c
-URL = https://github.com/json-c/json-c/archive/json-c-0.14-20200419.tar.gz
+URL = https://s3.amazonaws.com/json-c_releases/releases/json-c-0.13.1.tar.gz
 ARCHIVES = 
 
 include ../common/Makefile.common
