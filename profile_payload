@@ -1,2 +1,2 @@
 export USE_VALGRIND=0
-make -j1 check USE_VALGRIND=0 V=1 VERBOSE=1 || :
+make -j1 test USE_VALGRIND=0 V=1 VERBOSE=1 || :

@@ -1,2 +1,11 @@
 # This file contains recursive sources that require this package
+girara-dev
+json-c-dev
+json-c-dev32
+json-c-staticdev
+json-c-staticdev32
+libmypaint-dev
 rsyslog
+tpm2-abrmd-dev
+tpm2-tss-dev
+zathura-dev
