@@ -4,10 +4,10 @@
 #
 %define keepstatic 1
 Name     : json-c
-Version  : 21.07.31
-Release  : 20
-URL      : file:///aot/build/clearlinux/packages/json-c/json-c-v21.07.31.tar.gz
-Source0  : file:///aot/build/clearlinux/packages/json-c/json-c-v21.07.31.tar.gz
+Version  : 0.15.20200726
+Release  : 21
+URL      : file:///aot/build/clearlinux/packages/json-c/json-c-v0.15.20200726.tar.gz
+Source0  : file:///aot/build/clearlinux/packages/json-c/json-c-v0.15.20200726.tar.gz
 Summary  : A JSON implementation in C
 Group    : Development/Tools
 License  : GPL-2.0
@@ -105,7 +105,7 @@ unset https_proxy
 unset no_proxy
 export SSL_CERT_FILE=/var/cache/ca-certs/anchors/ca-certificates.crt
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1628436772
+export SOURCE_DATE_EPOCH=1628702919
 mkdir -p clr-build
 pushd clr-build
 export GCC_IGNORE_WERROR=1
@@ -378,7 +378,7 @@ unset PKG_CONFIG_PATH
 popd
 
 %install
-export SOURCE_DATE_EPOCH=1628436772
+export SOURCE_DATE_EPOCH=1628702919
 rm -rf %{buildroot}
 pushd clr-build32
 %make_install32
