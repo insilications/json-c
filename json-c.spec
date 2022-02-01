@@ -11,6 +11,7 @@ Source0  : file:///aot/build/clearlinux/packages/json-c/json-c-v11.1.2022.tar.gz
 Summary  : A JSON implementation in C
 Group    : Development/Tools
 License  : GPL-2.0
+Requires: json-c-lib = %{version}-%{release}
 BuildRequires : buildreq-cmake
 BuildRequires : doxygen
 BuildRequires : gcc
@@ -28,14 +29,66 @@ BuildRequires : glibc-libc32
 BuildRequires : glibc-staticdev
 BuildRequires : libgcc1
 BuildRequires : libstdc++
-BuildRequires : pkg-config
-BuildRequires : pkgconfig(32json-c)
-BuildRequires : pkgconfig(json-c)
 # Suppress stripping binaries
 %define __strip /bin/true
 %define debug_package %{nil}
 
 %description
+
+
+%package dev
+Summary: dev components for the json-c package.
+Group: Development
+Requires: json-c-lib = %{version}-%{release}
+Provides: json-c-devel = %{version}-%{release}
+Requires: json-c = %{version}-%{release}
+
+%description dev
+dev components for the json-c package.
+
+
+%package dev32
+Summary: dev32 components for the json-c package.
+Group: Default
+Requires: json-c-lib32 = %{version}-%{release}
+Requires: json-c-dev = %{version}-%{release}
+
+%description dev32
+dev32 components for the json-c package.
+
+
+%package lib
+Summary: lib components for the json-c package.
+Group: Libraries
+
+%description lib
+lib components for the json-c package.
+
+
+%package lib32
+Summary: lib32 components for the json-c package.
+Group: Default
+
+%description lib32
+lib32 components for the json-c package.
+
+
+%package staticdev
+Summary: staticdev components for the json-c package.
+Group: Default
+Requires: json-c-dev = %{version}-%{release}
+
+%description staticdev
+staticdev components for the json-c package.
+
+
+%package staticdev32
+Summary: staticdev32 components for the json-c package.
+Group: Default
+Requires: json-c-dev32 = %{version}-%{release}
+
+%description staticdev32
+staticdev32 components for the json-c package.
 
 
 %prep
@@ -48,7 +101,7 @@ unset https_proxy
 unset no_proxy
 export SSL_CERT_FILE=/var/cache/ca-certs/anchors/ca-certificates.crt
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1643685695
+export SOURCE_DATE_EPOCH=1643685776
 mkdir -p clr-build
 pushd clr-build
 export GCC_IGNORE_WERROR=1
@@ -336,7 +389,7 @@ unset PKG_CONFIG_PATH
 popd
 
 %install
-export SOURCE_DATE_EPOCH=1643685695
+export SOURCE_DATE_EPOCH=1643685776
 rm -rf %{buildroot}
 export AR=gcc-ar
 export RANLIB=gcc-ranlib
@@ -541,3 +594,53 @@ popd
 
 %files
 %defattr(-,root,root,-)
+
+%files dev
+%defattr(-,root,root,-)
+/usr/include/json-c/arraylist.h
+/usr/include/json-c/debug.h
+/usr/include/json-c/json.h
+/usr/include/json-c/json_c_version.h
+/usr/include/json-c/json_config.h
+/usr/include/json-c/json_inttypes.h
+/usr/include/json-c/json_object.h
+/usr/include/json-c/json_object_iterator.h
+/usr/include/json-c/json_pointer.h
+/usr/include/json-c/json_tokener.h
+/usr/include/json-c/json_types.h
+/usr/include/json-c/json_util.h
+/usr/include/json-c/json_visit.h
+/usr/include/json-c/linkhash.h
+/usr/include/json-c/printbuf.h
+/usr/lib64/cmake/json-c/json-c-config.cmake
+/usr/lib64/cmake/json-c/json-c-targets-release.cmake
+/usr/lib64/cmake/json-c/json-c-targets.cmake
+/usr/lib64/libjson-c.so
+/usr/lib64/pkgconfig/json-c.pc
+
+%files dev32
+%defattr(-,root,root,-)
+/usr/lib32/cmake/json-c/json-c-config.cmake
+/usr/lib32/cmake/json-c/json-c-targets-none.cmake
+/usr/lib32/cmake/json-c/json-c-targets.cmake
+/usr/lib32/libjson-c.so
+/usr/lib32/pkgconfig/32json-c.pc
+/usr/lib32/pkgconfig/json-c.pc
+
+%files lib
+%defattr(-,root,root,-)
+/usr/lib64/libjson-c.so.5
+/usr/lib64/libjson-c.so.5.1.0
+
+%files lib32
+%defattr(-,root,root,-)
+/usr/lib32/libjson-c.so.5
+/usr/lib32/libjson-c.so.5.1.0
+
+%files staticdev
+%defattr(-,root,root,-)
+/usr/lib64/libjson-c.a
+
+%files staticdev32
+%defattr(-,root,root,-)
+/usr/lib32/libjson-c.a
